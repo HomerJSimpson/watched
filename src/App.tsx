@@ -1,34 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
+import PasteBinForm from "./PasteBinForm";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/icons-material/Menu";
+import Paper from "@mui/material/Paper";
+import FormGroup from "@mui/material/FormGroup";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+    <>
+      <AppBar position="fixed" color="primary">
+        <Toolbar>
+          <IconButton edge="start" color="inherit" aria-label="menu">
+            <Menu />
+          </IconButton>
+          <Typography
+            sx={{
+              ">sub": {
+                textTransform: "lowercase",
+                fontSize: "60%",
+                fontStyle: "italic",
+                fontWeight: 300,
+              },
+            }}
+            variant="h6"
+          >
+            watch<sub>ED</sub>
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Toolbar />
+      <Paper square sx={{ px: 4, py: 1, height: "100%" }}>
+        <h6>Output</h6>
+        <FormGroup></FormGroup>
+        <PasteBinForm></PasteBinForm>
+      </Paper>
+    </>
+  );
 }
 
-export default App
+export default App;
