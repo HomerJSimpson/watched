@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "./App.css";
 import PasteBinForm from "./PasteBinForm";
 import AppBar from "@mui/material/AppBar";
