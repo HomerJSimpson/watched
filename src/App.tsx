@@ -33,7 +33,7 @@ function App() {
       </AppBar>
       <Toolbar />
       <Paper square sx={{ px: 4, py: 1, height: "100%" }}>
-        <h6>Output</h6>
+        <Typography>Output</Typography>
         <FormGroup></FormGroup>
         <PasteBinForm></PasteBinForm>
       </Paper>
