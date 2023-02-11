@@ -1,27 +1,36 @@
 import React from "react";
+
 import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
-const apiKeys = ["api_dev_key", "api_option", "api_paste_code"];
-
 function PasteBinForm() {
+  type State = { [key: string]: string };
   const [state, setState] = React.useState(
-    apiKeys.reduce((acc, e, i) => ((acc[e] = ""), acc), {})
+    JSON.parse(
+      localStorage.getItem("pbinfo") ||
+        '{"api_dev_key":"", "api_user_name":"","api_user_password":""}'
+    )
   );
+
   function saveClick(e: React.SyntheticEvent): void {
     console.log(state);
+    localStorage.setItem("pbinfo", JSON.stringify(state));
   }
+
   function onChange(e: React.ChangeEvent<HTMLInputElement>): void {
-    const update = { ...state };
-    update[e.target.id as keyof typeof apiKeys] = e.target.value;
+    type Update = { [key: string]: string };
+    const update: Update = { ...state };
+    update[e.target.id] = e.target.value;
     setState(update);
   }
+
   return (
     <>
-      <Typography variant="h4">Pastebin API play</Typography>
+      <Typography variant="h4">Pastebin Authentication Information</Typography>
       <Box
+        component="form"
         sx={{
           display: "flex",
           flexDirection: "row",
@@ -30,7 +39,7 @@ function PasteBinForm() {
           columnGap: "8px",
         }}
       >
-        {apiKeys.map((e, i) => (
+        {Object.keys(state).map((e, i) => (
           <TextField
             id={e}
             label={e}
@@ -42,15 +51,64 @@ function PasteBinForm() {
             onChange={onChange}
             required
             helperText="* Required"
-            sx={{ flex: "1 46%" }}
+            sx={{ flex: { xs: "1 100%", sm: "1 46%" } }}
             key={i}
+            type={e.indexOf("assword") > 0 ? "password" : ""}
           />
         ))}
       </Box>
-      <Button variant="contained" onClick={saveClick}>
-        Save
-      </Button>
+      <Box sx={{ display: "flex" }}>
+        <Button variant="contained" onClick={saveClick}>
+          Save
+        </Button>
+      </Box>
+      <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+        <Typography sx={{ flex: "0 0 100%" }} variant="h4">
+          User
+        </Typography>
+        <ApiUserCode pbinfo={state}></ApiUserCode>
+      </Box>
     </>
+  );
+}
+
+interface Props {
+  pbinfo: { [key: string]: string };
+}
+
+function ApiUserCode(props: Props): React.FC<Props> {
+  const [state, setState] = React.useState({ text: "no", ...props });
+  /**
+   * TODO:
+   *
+   * Flesh this out, POST, pass in pbinfo and convert to body(form)
+   * figure out the fetch or trucking switch to axios already
+   *  ***** https://cors.sh/playground/
+   */
+
+  React.useEffect(() => {
+    async function _fetchApiUserKey() {
+      let text;
+      try {
+        const response = await fetch("/pastebin.com/api/api_login.php", {
+          method: "POST",
+          body: new URLSearchParams(state.pbinfo),
+        });
+        text = await response.text();
+        console.log({ text });
+        setState({ ...state, text });
+      } catch (e: any) {
+        text = e.toString();
+      }
+      return text;
+    }
+    _fetchApiUserKey();
+  }, [state.text]);
+
+  return (
+    <Box>
+      <pre>{state.text + ""}</pre>
+    </Box>
   );
 }
 
