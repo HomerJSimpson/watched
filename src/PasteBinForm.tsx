@@ -85,25 +85,25 @@ function ApiUserCode(props: Props): React.FC<Props> {
    * figure out the fetch or trucking switch to axios already
    *  ***** https://cors.sh/playground/
    */
-  async function _fetchApiUserKey() {
-    let text;
-    try {
-      const response = await fetch("/pastebin.com/api/api_login.php", {
-        method: "POST",
-        body: new URLSearchParams(state.pbinfo),
-      });
-      text = await response.text();
-      console.log({ text });
-      setState({ ...state, text });
-    } catch (e: any) {
-      text = e.toString();
-    }
-    return text;
-  }
 
   React.useEffect(() => {
+    async function _fetchApiUserKey() {
+      let text;
+      try {
+        const response = await fetch("/pastebin.com/api/api_login.php", {
+          method: "POST",
+          body: new URLSearchParams(state.pbinfo),
+        });
+        text = await response.text();
+        console.log({ text });
+        setState({ ...state, text });
+      } catch (e: any) {
+        text = e.toString();
+      }
+      return text;
+    }
     _fetchApiUserKey();
-  }, []);
+  }, [state.text]);
 
   return (
     <Box>
