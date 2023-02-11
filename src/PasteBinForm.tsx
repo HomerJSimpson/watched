@@ -83,15 +83,16 @@ const ApiUserCode: React.FC<Props> = (props) => {
    *
    * Flesh this out, POST, pass in pbinfo and convert to body(form)
    * figure out the fetch or trucking switch to axios already
+   *  ***** https://cors.sh/playground/
    */
   async function _fetchApiUserKey() {
     let text;
     try {
-      const response = await fetch("https://pastebin.com/api/api_login.php", {
+      const response = await fetch("/pastebin.com/api/api_login.php", {
         method: "POST",
-        mode: "no-cors",
+        body: new URLSearchParams(state.pbinfo),
       });
-      text = await response.json();
+      text = await response.text();
       console.log({ text });
     } catch (e: any) {
       text = e.toString();
