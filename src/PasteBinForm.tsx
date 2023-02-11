@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 
 function PasteBinForm() {
   type State = { [key: string]: string };
@@ -76,7 +76,7 @@ interface Props {
   pbinfo: { [key: string]: string };
 }
 
-const ApiUserCode: React.FC<Props> = (props) => {
+function ApiUserCode(props: Props): React.FC<Props> {
   const [state, setState] = React.useState({ text: "no", ...props });
   /**
    * TODO:
@@ -94,6 +94,7 @@ const ApiUserCode: React.FC<Props> = (props) => {
       });
       text = await response.text();
       console.log({ text });
+      setState({ ...state, text });
     } catch (e: any) {
       text = e.toString();
     }
@@ -102,13 +103,13 @@ const ApiUserCode: React.FC<Props> = (props) => {
 
   React.useEffect(() => {
     _fetchApiUserKey();
-  });
+  }, []);
 
   return (
     <Box>
       <pre>{state.text + ""}</pre>
     </Box>
   );
-};
+}
 
 export default PasteBinForm;
