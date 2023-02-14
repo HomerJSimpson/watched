@@ -76,7 +76,7 @@ interface Props {
   pbinfo: { [key: string]: string };
 }
 
-function ApiUserCode(props: Props): React.FC<Props> {
+function ApiUserCode(props: Props): JSX.Element {
   const [state, setState] = React.useState({ text: "no", ...props });
   /**
    * TODO:
@@ -102,13 +102,17 @@ function ApiUserCode(props: Props): React.FC<Props> {
       }
       return text;
     }
-    _fetchApiUserKey();
+    if (false && !state.pbinfo.api_user_key) {
+      _fetchApiUserKey();
+    }
   }, [state.text]);
 
   return (
-    <Box>
-      <pre>{state.text + ""}</pre>
-    </Box>
+    <>
+      <Box>
+        <pre>{state.text + ""}</pre>
+      </Box>
+    </>
   );
 }
 
